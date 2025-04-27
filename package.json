@@ -1,0 +1,24 @@
+{
+  "name": "json-schema-2-xlsx",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "dev": "tsx --watch src/example.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/json-schema": "^7.0.15",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "json-schema": "^0.4.0",
+    "jsonpath-plus": "^10.3.0"
+  }
+}

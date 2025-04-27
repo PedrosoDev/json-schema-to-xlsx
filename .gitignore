@@ -1,0 +1,52 @@
+# Dependências
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Arquivos de compilação
+dist/
+build/
+lib/
+out/
+*.js
+*.js.map
+*.d.ts
+
+# Arquivos temporários Excel
+~$*.xlsx
+~$*.xls
+~$*.xlsm
+~$*.xlsb
+output.xlsx
+
+# Arquivos de ambiente
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Arquivos de configuração do IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de log
+logs/
+*.log
+
+# Arquivos de cobertura de teste
+coverage/
+.nyc_output/
+
+# Arquivos temporários
+tmp/
+temp/@QZQW
