@@ -32,7 +32,7 @@ output.xlsx
 # Arquivos de configuração do IDE
 .vscode/
 .idea/
-*.swp
+*.swpgit
 *.swo
 
 # Arquivos do sistema

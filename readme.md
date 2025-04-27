@@ -1,0 +1,1 @@
+- [ ] Fazer o merge correto dos dados com array aninhados
