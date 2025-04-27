@@ -7,7 +7,7 @@ export function transformJsonSchemaToHeaders(jsonSchema: JsonSchema): Header[] {
     jsonSchema: JsonSchema,
     path: string
   ): Header => {
-    const header: Header = {
+    let header: Header = {
       key: path,
       title: jsonSchema.title || path,
     };
@@ -29,7 +29,14 @@ export function transformJsonSchemaToHeaders(jsonSchema: JsonSchema): Header[] {
 
       const subPath = path ? `${path}[:]` : "[:]";
       const subHeader = transformSchemaToHeader(items, subPath);
-      header.subHeaders = [subHeader];
+      if (items.title) {
+        header.subHeaders = [subHeader];
+      } else {
+        header = {
+          ...subHeader,
+          title: header.title,
+        };
+      }
     }
 
     return header;

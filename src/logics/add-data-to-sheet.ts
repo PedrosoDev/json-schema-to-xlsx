@@ -1,7 +1,7 @@
 import { Style, Worksheet } from "exceljs";
 import { JSONPath } from "jsonpath-plus";
 import { DataPaths } from "../commons/type";
-import { getMaxSumArrayLengthOfObject } from "../utils/get-max-sum-array-length-of-object";
+import { getMaxSumArrayLength } from "../utils/get-max-sum-array-length-of-object";
 
 const DEFAULT_CELL_STYLE: Partial<Style> = {
   alignment: {
@@ -30,7 +30,7 @@ export function addDataToSheet(
   let row = startRow;
   for (const itemData of data) {
     const itemRow = row;
-    const itemMaxDepth = getMaxSumArrayLengthOfObject(itemData);
+    const itemMaxDepth = getMaxSumArrayLength(itemData);
 
     for (const [path, info] of Object.entries(dataPaths)) {
       let propertyRow = itemRow;
@@ -39,7 +39,10 @@ export function addDataToSheet(
       const propertyColumn = info.column;
 
       const value = JSONPath({ path, json: itemData });
-      rowSpan -= getMaxSumArrayLengthOfObject(value) - 1;
+      const maxSumArrayLength = getMaxSumArrayLength(value);
+      rowSpan -= maxSumArrayLength - 1;
+
+      console.log({ value, itemMaxDepth, currentDepth, maxSumArrayLength });
 
       for (const valueItem of value) {
         if (valueItem === undefined) continue;
@@ -47,23 +50,27 @@ export function addDataToSheet(
         const cell = sheet.getCell(propertyRow, propertyColumn);
         cell.value = valueItem;
         cell.style = cellStyle;
+
+        if (merge && rowSpan > 1) {
+          const starMergeRow = propertyRow;
+          const endMergeRow = starMergeRow + rowSpan - 1;
+
+          propertyRow = endMergeRow;
+
+          console.log(path, { propertyRow, rowSpan });
+          console.log(
+            `Merging cells from ${starMergeRow} to ${endMergeRow} in column ${propertyColumn}`
+          );
+
+          sheet.mergeCells({
+            top: starMergeRow,
+            bottom: endMergeRow,
+            left: propertyColumn,
+            right: propertyColumn,
+          });
+        }
+
         propertyRow++;
-      }
-
-      if (merge && rowSpan > 1) {
-        const sendRow = itemRow + rowSpan - 1;
-
-        console.log(path, { itemRow, rowSpan });
-        console.log(
-          `Merging cells from ${itemRow} to ${sendRow} in column ${propertyColumn}`
-        );
-
-        sheet.mergeCells({
-          top: itemRow,
-          bottom: sendRow,
-          left: propertyColumn,
-          right: propertyColumn,
-        });
       }
 
       row = Math.max(row, propertyRow);

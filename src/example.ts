@@ -53,42 +53,42 @@ const jsonSchema: JsonSchema = {
 };
 
 const data = [
-  {
-    name: "John Doe",
-    age: 30,
-    hobbies: [
-      {
-        hobby: "Reading",
-        frequency: "Daily",
-        subActivities: [
-          { name: "Fiction", duration: 30 },
-          { name: "Non-Fiction", duration: 20 },
-        ],
-      },
-      {
-        hobby: "Cycling",
-        frequency: "Weekly",
-        subActivities: [
-          { name: "Mountain Biking", duration: 60 },
-          { name: "Road Cycling", duration: 45 },
-        ],
-      },
-    ],
-  },
   // {
-  //   name: "Jane Smith",
-  //   age: 25,
+  //   name: "John Doe",
+  //   age: 30,
   //   hobbies: [
   //     {
-  //       hobby: "Cooking",
+  //       hobby: "Reading",
+  //       frequency: "Daily",
+  //       subActivities: [
+  //         { name: "Fiction", duration: 30 },
+  //         { name: "Non-Fiction", duration: 20 },
+  //       ],
+  //     },
+  //     {
+  //       hobby: "Cycling",
   //       frequency: "Weekly",
   //       subActivities: [
-  //         { name: "Baking", duration: 120 },
-  //         { name: "Grilling", duration: 90 },
+  //         { name: "Mountain Biking", duration: 60 },
+  //         { name: "Road Cycling", duration: 45 },
   //       ],
   //     },
   //   ],
   // },
+  {
+    name: "Jane Smith",
+    age: 25,
+    hobbies: [
+      {
+        hobby: "Cooking",
+        frequency: "Weekly",
+        subActivities: [
+          { name: "Baking", duration: 120 },
+          { name: "Grilling", duration: 90 },
+        ],
+      },
+    ],
+  },
 ];
 
 const workbook = jsonSchemaToXlsx(jsonSchema, data);
