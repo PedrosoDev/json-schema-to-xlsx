@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getMaxSumArrayLengthOfObject } from "./get-max-sum-array-length-of-object";
+import { calculateArraysDepthOrSum } from "./get-max-sum-array-length-of-object";
 
 describe("getSumMaxArrayLengthOfObject", () => {
   it("deve retornar o comprimento máximo de arrays aninhados em um objeto", () => {
@@ -14,7 +14,7 @@ describe("getSumMaxArrayLengthOfObject", () => {
       },
     };
 
-    const result = getMaxSumArrayLengthOfObject(data);
+    const result = calculateArraysDepthOrSum(data);
     expect(result).toBe(4); // O comprimento máximo é 4 (o array [6, 7, 8, 9])
   });
 
@@ -30,8 +30,8 @@ describe("getSumMaxArrayLengthOfObject", () => {
       ],
     };
 
-    const result = getMaxSumArrayLengthOfObject(data);
-    expect(result).toBe(6); // O comprimento máximo é 3 (o array [6, 7, 8])
+    const result = calculateArraysDepthOrSum(data);
+    expect(result).toBe(6); // O comprimento máximo é 6 (3 + 3) que é a soma dos comprimentos dos arrays aninhados
   });
 
   it("deve retornar coreto o comprimento máximo de arrays aninhados em um arrays", () => {
@@ -58,7 +58,35 @@ describe("getSumMaxArrayLengthOfObject", () => {
       },
     ];
 
-    const result = getMaxSumArrayLengthOfObject(data);
+    const result = calculateArraysDepthOrSum(data);
     expect(result).toBe(6); // O comprimento máximo é 6 (4 + 2), pois somando os comprimentos dos arrays aninhados
+  });
+
+  it("Teste", () => {
+    const data = {
+      name: "John Doe",
+      age: 30,
+      hobbies: [
+        {
+          hobby: "Reading",
+          frequency: "Daily",
+          subActivities: [
+            { name: "Fiction", duration: 30 },
+            { name: "Non-Fiction", duration: 20 },
+          ],
+        },
+        {
+          hobby: "Cycling",
+          frequency: "Weekly",
+          subActivities: [
+            { name: "Mountain Biking", duration: 60 },
+            { name: "Road Cycling", duration: 45 },
+          ],
+        },
+      ],
+    };
+
+    const result = calculateArraysDepthOrSum(data);
+    expect(result).toBe(6); // O comprimento máximo é 6 (2 + 2 + 2), pois somando os comprimentos dos arrays aninhados
   });
 });

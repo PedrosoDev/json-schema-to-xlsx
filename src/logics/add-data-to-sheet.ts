@@ -1,7 +1,7 @@
 import { Style, Worksheet } from "exceljs";
 import { JSONPath } from "jsonpath-plus";
 import { DataPaths } from "../commons/type";
-import { getMaxSumArrayLength } from "../utils/get-max-sum-array-length-of-object";
+import { calculateArraysDepthOrSum } from "../utils/get-max-sum-array-length-of-object";
 
 const DEFAULT_CELL_STYLE: Partial<Style> = {
   alignment: {
@@ -30,21 +30,20 @@ export function addDataToSheet(
   let row = startRow;
   for (const itemData of data) {
     const itemRow = row;
-    const itemMaxDepth = getMaxSumArrayLength(itemData);
 
     for (const [path, info] of Object.entries(dataPaths)) {
       let propertyRow = itemRow;
-      const currentDepth = path.split("[:]").length - 1;
-      let rowSpan = itemMaxDepth - currentDepth;
       const propertyColumn = info.column;
 
-      const value = JSONPath({ path, json: itemData });
-      const maxSumArrayLength = getMaxSumArrayLength(value);
-      rowSpan -= maxSumArrayLength - 1;
+      const value = JSONPath({ path, json: itemData, resultType: "value" });
+      const parent = JSONPath({ path, json: itemData, resultType: "parent" });
 
-      console.log({ value, itemMaxDepth, currentDepth, maxSumArrayLength });
+      for (let i = 0; i < value.length; i++) {
+        const valueItem = value[i];
+        const parentItem = parent[i];
 
-      for (const valueItem of value) {
+        let rowSpan = calculateArraysDepthOrSum(parentItem);
+
         if (valueItem === undefined) continue;
 
         const cell = sheet.getCell(propertyRow, propertyColumn);
@@ -56,11 +55,6 @@ export function addDataToSheet(
           const endMergeRow = starMergeRow + rowSpan - 1;
 
           propertyRow = endMergeRow;
-
-          console.log(path, { propertyRow, rowSpan });
-          console.log(
-            `Merging cells from ${starMergeRow} to ${endMergeRow} in column ${propertyColumn}`
-          );
 
           sheet.mergeCells({
             top: starMergeRow,

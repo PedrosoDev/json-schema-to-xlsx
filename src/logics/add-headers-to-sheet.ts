@@ -1,4 +1,4 @@
-import { Style, Worksheet } from "exceljs";
+import { Location, Style, Worksheet } from "exceljs";
 import { Header, DataPathInfo, DataPaths } from "../commons/type";
 import { getDepthOfHeader } from "../utils/get-depth-of-header";
 import { recursiveSubHeadersLength } from "../utils/recursive-sub-headers-length";
@@ -23,6 +23,7 @@ const DEFAULT_HEADER_STYLE: Partial<Style> = {
 
 type Options = {
   cellStyle?: Partial<Style>;
+  merge?: boolean;
   startRow?: number;
   startColumn?: number;
 };
@@ -45,6 +46,7 @@ export function addHeadersToSheet(
 ): Result {
   const {
     cellStyle = DEFAULT_HEADER_STYLE,
+    merge = true,
     startRow = 1,
     startColumn = 1,
   } = options || {};
@@ -70,19 +72,23 @@ export function addHeadersToSheet(
       cell.style = cellStyle;
 
       if (!isEmptyArray(currentHeader.subHeaders)) {
-        recursive(currentHeader.subHeaders, row + 1, column);
+        recursive(currentHeader.subHeaders, row + rowSpan, column);
       } else {
         dataPaths.set(currentHeader.key, {
           column,
         });
       }
 
-      sheet.mergeCells({
-        top: row,
-        left: column,
-        bottom: row + rowSpan - 1,
-        right: column + columnSpan - 1,
-      });
+      if (merge && (rowSpan > 1 || columnSpan > 1)) {
+        const location: Location = {
+          top: row,
+          left: column,
+          bottom: row + rowSpan - 1,
+          right: column + columnSpan - 1,
+        };
+
+        sheet.mergeCells(location);
+      }
 
       column += columnSpan;
     }
