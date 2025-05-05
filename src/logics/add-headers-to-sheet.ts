@@ -4,6 +4,7 @@ import { getDepthOfHeader } from "../utils/get-depth-of-header";
 import { recursiveSubHeadersLength } from "../utils/recursive-sub-headers-length";
 import { isEmptyArray } from "../utils/is-empty-array";
 import { mapToObject } from "../utils/map-to-object";
+import { isNotEmptyArray } from "../utils/is-not-empty-array";
 
 const DEFAULT_HEADER_STYLE: Partial<Style> = {
   border: {
@@ -71,7 +72,7 @@ export function addHeadersToSheet(
       cell.value = currentHeader.title;
       cell.style = cellStyle;
 
-      if (!isEmptyArray(currentHeader.subHeaders)) {
+      if (isNotEmptyArray(currentHeader.subHeaders)) {
         recursive(currentHeader.subHeaders, row + rowSpan, column);
       } else {
         dataPaths.set(currentHeader.key, {

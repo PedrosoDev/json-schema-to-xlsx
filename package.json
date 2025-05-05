@@ -1,15 +1,45 @@
 {
   "name": "json-schema-2-xlsx",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Library for automatically converting JSON Schema structures to Excel (XLSX) spreadsheets in a structured way",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "test": "vitest",
-    "dev": "tsx --watch src/example.ts"
+    "build": "tsc",
+    "dev": "tsx --watch src/example.ts",
+    "prepublishOnly": "npm run build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "json-schema",
+    "xlsx",
+    "excel",
+    "converter",
+    "exceljs",
+    "typescript",
+    "json",
+    "schema",
+    "excel-generator"
+  ],
+  "author": "PedrosoOrganization",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PedrosoOrganization/json-schema-2-xlsx"
+  },
+  "bugs": {
+    "url": "https://github.com/PedrosoOrganization/json-schema-2-xlsx/issues"
+  },
+  "homepage": "https://github.com/PedrosoOrganization/json-schema-2-xlsx#readme",
   "devDependencies": {
     "@types/json-schema": "^7.0.15",
     "tsx": "^4.19.3",

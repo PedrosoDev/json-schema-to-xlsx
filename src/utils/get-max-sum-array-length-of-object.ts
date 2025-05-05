@@ -31,6 +31,8 @@ export function calculateArraysDepthOrSum(data: object): number {
       }
       return Math.max(...lengthArray, 0);
     }
+
+    return 0;
   };
 
   return recursive(data);

@@ -1,5 +1,6 @@
 import { Header, JsonSchema } from "../commons/type";
 import { isEmptyArray } from "../utils/is-empty-array";
+import { isNotEmptyArray } from "../utils/is-not-empty-array";
 import { isObject } from "../utils/is-object";
 
 export function transformJsonSchemaToHeaders(jsonSchema: JsonSchema): Header[] {
@@ -44,5 +45,5 @@ export function transformJsonSchemaToHeaders(jsonSchema: JsonSchema): Header[] {
 
   const header = transformSchemaToHeader(jsonSchema, "");
 
-  return isEmptyArray(header.subHeaders) ? [header] : header.subHeaders;
+  return isNotEmptyArray(header.subHeaders) ? header.subHeaders : [header];
 }

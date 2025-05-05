@@ -1,105 +1,95 @@
-import { Workbook } from "exceljs";
 import { jsonSchemaToXlsx } from "./json-schema-to-xlsx";
 import { JsonSchema } from "./commons/type";
 
-const output = "output.xlsx";
-
-const jsonSchema: JsonSchema = {
+// Example of a JSON Schema for a product catalog
+const productCatalogSchema: JsonSchema = {
+  title: "Product Catalog Schema",
   type: "object",
   properties: {
-    name: {
+    category: {
+      title: "Category",
       type: "string",
-      title: "Name",
+      description: "Product category",
     },
-    age: {
-      type: "integer",
-      title: "Age",
+    name: {
+      title: "Product Name",
+      type: "string",
+      description: "Name of the product",
     },
-    hobbies: {
-      type: "array",
-      title: "Hobbies",
-      items: {
-        type: "object",
-        properties: {
-          hobby: {
-            type: "string",
-            title: "Hobby",
-          },
-          frequency: {
-            type: "string",
-            title: "Frequency",
-          },
-          subActivities: {
-            type: "array",
-            title: "Sub Activities",
-            items: {
-              type: "object",
-              properties: {
-                name: {
-                  type: "string",
-                  title: "Activity Name",
-                },
-                duration: {
-                  type: "integer",
-                  title: "Duration (minutes)",
-                },
-              },
+    code: {
+      title: "Product Code",
+      type: "string",
+      description: "SKU code",
+    },
+    price: {
+      title: "Price",
+      type: "number",
+      description: "Product price in USD",
+    },
+    available: {
+      title: "Availability",
+      type: "boolean",
+      description: "Product availability",
+    },
+    specifications: {
+      title: "Technical Specifications",
+      type: "object",
+      properties: {
+        weight: {
+          title: "Weight",
+          type: "number",
+          description: "Weight in kg",
+        },
+        dimensions: {
+          title: "Dimensions",
+          type: "object",
+          properties: {
+            height: {
+              title: "Height",
+              type: "number",
+              description: "Height in cm",
+            },
+            width: {
+              title: "Width",
+              type: "number",
+              description: "Width in cm",
+            },
+            depth: {
+              title: "Depth",
+              type: "number",
+              description: "Depth in cm",
             },
           },
         },
       },
     },
-    educacao: {
+    colors: {
+      title: "Available Colors",
       type: "array",
-      title: "Educação",
+      description: "Available colors",
       items: {
+        // title: "Color",
         type: "object",
         properties: {
-          instituicao: {
+          name: {
+            title: "Color Name",
             type: "string",
-            title: "Instituição",
+            description: "Color name",
           },
-          nivel: {
+          code: {
+            title: "Color Code",
             type: "string",
-            title: "Nível",
+            description: "Hexadecimal color code",
           },
-          cursos: {
-            type: "array",
-            title: "Cursos",
-            items: {
-              type: "object",
-              properties: {
-                nome: {
-                  type: "string",
-                  title: "Nome do Curso",
-                },
-                anoConclusao: {
-                  type: "integer",
-                  title: "Ano de Conclusão",
-                },
-                disciplinas: {
-                  type: "array",
-                  title: "Disciplinas",
-                  items: {
-                    type: "object",
-                    properties: {
-                      nome: {
-                        type: "string",
-                        title: "Nome da Disciplina",
-                      },
-                      nota: {
-                        type: "number",
-                        title: "Nota Final",
-                      },
-                      creditos: {
-                        type: "integer",
-                        title: "Créditos",
-                      },
-                    },
-                  },
-                },
-              },
-            },
+          inStock: {
+            title: "In Stock",
+            type: "boolean",
+            description: "Stock availability",
+          },
+          stockQuantity: {
+            title: "Stock Quantity",
+            type: "number",
+            description: "Quantity in stock",
           },
         },
       },
@@ -107,111 +97,140 @@ const jsonSchema: JsonSchema = {
   },
 };
 
-const data = [
+// Example data to fill the spreadsheet
+const productData = [
   {
-    name: "John Doe",
-    age: 30,
-    hobbies: [
+    category: "Electronics",
+    name: "Smartphone XYZ",
+    code: "SMRT-001",
+    price: 1299.99,
+    available: true,
+    specifications: {
+      weight: 0.18,
+      dimensions: {
+        height: 15.2,
+        width: 7.1,
+        depth: 0.8,
+      },
+    },
+    colors: [
       {
-        hobby: "Reading",
-        frequency: "Daily",
-        subActivities: [
-          { name: "Fiction", duration: 30 },
-          { name: "Non-Fiction", duration: 20 },
-          { name: "Comics", duration: 15 },
-        ],
+        name: "Black",
+        code: "#000000",
+        inStock: true,
+        stockQuantity: 150,
       },
       {
-        hobby: "Cycling",
-        frequency: "Weekly",
-        subActivities: [
-          { name: "Mountain Biking", duration: 60 },
-          { name: "Road Cycling", duration: 45 },
-        ],
-      },
-    ],
-    educacao: [
-      {
-        instituicao: "Universidade Federal",
-        nivel: "Graduação",
-        cursos: [
-          {
-            nome: "Ciência da Computação",
-            anoConclusao: 2018,
-            disciplinas: [
-              { nome: "Algoritmos", nota: 9.5, creditos: 4 },
-              { nome: "Estrutura de Dados", nota: 8.7, creditos: 5 },
-              { nome: "Banco de Dados", nota: 9.0, creditos: 4 },
-            ],
-          },
-          {
-            nome: "Especialização em IA",
-            anoConclusao: 2020,
-            disciplinas: [
-              { nome: "Machine Learning", nota: 9.8, creditos: 6 },
-              { nome: "Redes Neurais", nota: 9.2, creditos: 5 },
-            ],
-          },
-        ],
+        name: "White",
+        code: "#FFFFFF",
+        inStock: true,
+        stockQuantity: 75,
       },
       {
-        instituicao: "Instituto Técnico",
-        nivel: "Técnico",
-        cursos: [
-          {
-            nome: "Desenvolvimento Web",
-            anoConclusao: 2015,
-            disciplinas: [
-              { nome: "HTML/CSS", nota: 10.0, creditos: 2 },
-              { nome: "JavaScript", nota: 9.5, creditos: 3 },
-            ],
-          },
-        ],
+        name: "Gold",
+        code: "#FFD700",
+        inStock: false,
+        stockQuantity: 0,
       },
     ],
   },
-
-  // -=-=-=-=-=-=-=-=(*)=-=-=-=-=-=-=-=-
-
   {
-    name: "Jane Smith",
-    age: 25,
-    hobbies: [
-      {
-        hobby: "Cooking",
-        frequency: "Weekly",
-        subActivities: [
-          { name: "Baking", duration: 120 },
-          { name: "Grilling", duration: 90 },
-        ],
+    category: "Electronics",
+    name: "Tablet Pro",
+    code: "TBLT-002",
+    price: 899.99,
+    available: true,
+    specifications: {
+      weight: 0.45,
+      dimensions: {
+        height: 25.0,
+        width: 17.5,
+        depth: 0.6,
       },
-    ],
-    educacao: [
+    },
+    colors: [
       {
-        instituicao: "Universidade Estadual",
-        nivel: "Mestrado",
-        cursos: [
-          {
-            nome: "Biologia Molecular",
-            anoConclusao: 2023,
-            disciplinas: [
-              { nome: "Genética", nota: 9.7, creditos: 5 },
-              { nome: "Bioquímica", nota: 8.9, creditos: 4 },
-              { nome: "Microbiologia", nota: 9.5, creditos: 6 },
-            ],
-          },
-        ],
+        name: "Silver",
+        code: "#C0C0C0",
+        inStock: true,
+        stockQuantity: 120,
+      },
+      {
+        name: "Blue",
+        code: "#0000FF",
+        inStock: true,
+        stockQuantity: 45,
       },
     ],
   },
 ];
 
-const workbook = jsonSchemaToXlsx(jsonSchema, data);
+// Generate Excel spreadsheet with styled headers
+const workbook = jsonSchemaToXlsx(productCatalogSchema, productData, {
+  startRow: 2,
+  headerCellStyle: {
+    fill: {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "FF4F81BD" },
+    },
+    font: {
+      bold: true,
+      color: { argb: "FFFFFFFF" },
+      size: 12,
+    },
+    alignment: {
+      vertical: "middle",
+      horizontal: "center",
+    },
+    border: {
+      top: { style: "thin" },
+      left: { style: "thin" },
+      bottom: { style: "thin" },
+      right: { style: "thin" },
+    },
+  },
+});
 
+// Additional spreadsheet customization
+const sheet = workbook.getWorksheet(1);
+if (!sheet) throw new Error("Worksheet not found");
+
+sheet.name = "Product Catalog";
+
+// Add title to the spreadsheet
+sheet.mergeCells("A1:M1");
+const titleCell = sheet.getCell("A1");
+titleCell.value = "PRODUCT CATALOG";
+titleCell.font = {
+  name: "Arial",
+  size: 18,
+  bold: true,
+  color: { argb: "FF333333" },
+};
+titleCell.alignment = {
+  horizontal: "center",
+  vertical: "middle",
+};
+titleCell.fill = {
+  type: "pattern",
+  pattern: "solid",
+  fgColor: { argb: "FFE6E6E6" },
+};
+
+// Adjust column widths for better visualization
+sheet.columns.forEach((column) => {
+  column.width = 15;
+});
+
+// Save the spreadsheet to a file
 workbook.xlsx
-  .writeFile(output)
+  .writeFile("product-catalog.xlsx")
   .then(() => {
-    console.log("File saved successfully.");
+    console.log('File "product-catalog.xlsx" created successfully!');
+    console.log(
+      "This example demonstrates how to use the json-schema-2-xlsx library to generate a spreadsheet from a JSON Schema."
+    );
   })
   .catch((error) => {
     console.error("Error saving file:", error);
