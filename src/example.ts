@@ -165,73 +165,77 @@ const productData = [
   },
 ];
 
-// Generate Excel spreadsheet with styled headers
-const workbook = jsonSchemaToXlsx(productCatalogSchema, productData, {
-  startRow: 2,
-  headerCellStyle: {
-    fill: {
-      type: "pattern",
-      pattern: "solid",
-      fgColor: { argb: "FF4F81BD" },
+async function main() {
+  // Generate Excel spreadsheet with styled headers
+  const workbook = await jsonSchemaToXlsx(productCatalogSchema, productData, {
+    startRow: 2,
+    headerCellStyle: {
+      fill: {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FF4F81BD" },
+      },
+      font: {
+        bold: true,
+        color: { argb: "FFFFFFFF" },
+        size: 12,
+      },
+      alignment: {
+        vertical: "middle",
+        horizontal: "center",
+      },
+      border: {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      },
     },
-    font: {
-      bold: true,
-      color: { argb: "FFFFFFFF" },
-      size: 12,
-    },
-    alignment: {
-      vertical: "middle",
-      horizontal: "center",
-    },
-    border: {
-      top: { style: "thin" },
-      left: { style: "thin" },
-      bottom: { style: "thin" },
-      right: { style: "thin" },
-    },
-  },
-});
-
-// Additional spreadsheet customization
-const sheet = workbook.getWorksheet(1);
-if (!sheet) throw new Error("Worksheet not found");
-
-sheet.name = "Product Catalog";
-
-// Add title to the spreadsheet
-sheet.mergeCells("A1:M1");
-const titleCell = sheet.getCell("A1");
-titleCell.value = "PRODUCT CATALOG";
-titleCell.font = {
-  name: "Arial",
-  size: 18,
-  bold: true,
-  color: { argb: "FF333333" },
-};
-titleCell.alignment = {
-  horizontal: "center",
-  vertical: "middle",
-};
-titleCell.fill = {
-  type: "pattern",
-  pattern: "solid",
-  fgColor: { argb: "FFE6E6E6" },
-};
-
-// Adjust column widths for better visualization
-sheet.columns.forEach((column) => {
-  column.width = 15;
-});
-
-// Save the spreadsheet to a file
-workbook.xlsx
-  .writeFile("product-catalog.xlsx")
-  .then(() => {
-    console.log('File "product-catalog.xlsx" created successfully!');
-    console.log(
-      "This example demonstrates how to use the json-schema-2-xlsx library to generate a spreadsheet from a JSON Schema."
-    );
-  })
-  .catch((error) => {
-    console.error("Error saving file:", error);
   });
+
+  // Additional spreadsheet customization
+  const sheet = workbook.getWorksheet(1);
+  if (!sheet) throw new Error("Worksheet not found");
+
+  sheet.name = "Product Catalog";
+
+  // Add title to the spreadsheet
+  sheet.mergeCells("A1:M1");
+  const titleCell = sheet.getCell("A1");
+  titleCell.value = "PRODUCT CATALOG";
+  titleCell.font = {
+    name: "Arial",
+    size: 18,
+    bold: true,
+    color: { argb: "FF333333" },
+  };
+  titleCell.alignment = {
+    horizontal: "center",
+    vertical: "middle",
+  };
+  titleCell.fill = {
+    type: "pattern",
+    pattern: "solid",
+    fgColor: { argb: "FFE6E6E6" },
+  };
+
+  // Adjust column widths for better visualization
+  sheet.columns.forEach((column) => {
+    column.width = 15;
+  });
+
+  // Save the spreadsheet to a file
+  workbook.xlsx
+    .writeFile("product-catalog.xlsx")
+    .then(() => {
+      console.log('File "product-catalog.xlsx" created successfully!');
+      console.log(
+        "This example demonstrates how to use the json-schema-2-xlsx library to generate a spreadsheet from a JSON Schema."
+      );
+    })
+    .catch((error) => {
+      console.error("Error saving file:", error);
+    });
+}
+
+main();
